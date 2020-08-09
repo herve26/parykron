@@ -1,23 +1,22 @@
 import React from 'react';
+import { ReactReader } from 'react-reader';
 import logo from './logo.svg';
 import './App.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <header style={{position: 'relative', height: '100vh'}}>
+        {/* <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        </p> */}
+        <ReactReader
+          url={"/life.epub"}
+          location={2}
+          locationChanged={epubcifi => console.log(epubcifi)}
+        />
       </header>
     </div>
   );

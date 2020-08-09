@@ -1,0 +1,350 @@
+import React, { Component, forwardRef } from 'react';
+import { EpubView } from 'react-reader';
+import styled from 'styled-components';
+import Button from './button';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { getBasename } from '../utils/book';
+import Range from '../utils/range';
+import Loader from 'react-loader-spinner'
+
+
+const ReaderContainer = styled.div`
+    /* width: ${props => props.wide}px; */
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+`
+
+const BookReaderWrapper = styled.div`
+    padding: 16px;
+    width: 100%;
+    height: 100%;
+`
+
+const ChevronWrapper = styled.div`
+    position: absolute;
+    top: 4px;
+    bottom: 0;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+`
+
+const LoaderWrapper = styled.div`
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+export default class BookReader extends Component {
+    constructor(props) {
+        super(props);
+
+        this.readerRef = React.createRef();
+        this.rendition = ''
+        this.state = {cfi: '', rendition: '', first_load: false }
+        this.prevComments = []
+        this.spinner = "TailSpin"
+        this.counter = 0
+        this.timer = {timer: null, timed: false}
+        // console.log(this.props.location)
+        // console.log(this.props.renderData)
+    }
+
+    handleClick = v => e => {
+
+        if (v === 'left') {
+            const node = this.readerRef.current;
+            node.prevPage();
+        }
+        else if (v === 'right') {
+            const node = this.readerRef.current;
+            node.nextPage();
+        }
+
+        this.removeAnnotations()
+        this.AddAnnotations()
+    };
+
+    getRendition = rendition => {
+        // console.log(rendition)
+        this.setState({rendition: rendition})
+        // this.addStyleSheets(rendition)
+        rendition.on('selected', (cfiRange, content) => {
+            // console.log(content)
+            this.props.handleModalOpen(true)(cfiRange)
+        })
+        // console.log(rendition.getContents())
+        // TODO: use this function to initialize the settings and TOC
+        rendition.on('rendered', (section, view) => {
+            // console.log(section)
+            // rendition.q.enqueue(this.addStyleSheets)
+            // this.addStyleSheets();
+            // this.injectStyle()
+            // this.injectFontClass()
+            // this.populateComments()
+            // GODLDIE MAGAZINE
+        })
+
+        rendition.on('displayed', (section) => {
+            // this.state.rendition.flow(this.props.pageFlow)
+            
+        })
+
+        rendition.on('resized', ()=> {
+            console.log('resized')
+            
+            // this.populateComments();
+        })
+    }
+
+    addStyleSheets = () => {
+        // if(this.state.rendition){
+            console.log('adding font stylesheet')
+            this.state.rendition.themes.register('/style/font-style.css')
+            // rendition.themes.font(`${this.props.renderData.font}`)
+            // this.state.rendition.themes.register('Open Sans', '/style/font-style.css')
+            // this.state.rendition.getContents().forEach((content) => {
+            //     const fontStyle = content.document.createElement('link')
+            //     fontStyle.setAttribute('href','/style/font-style.css')
+            //     fontStyle.setAttribute('rel','stylesheet')
+            //     fontStyle.setAttribute('type', 'text/css')
+            //     content.document.head.appendChild(fontStyle)
+            // })
+        // }
+    }
+
+    populateComments = () => {
+        console.log(`loading comments`)
+        console.log(this.props.comments)
+        // this.counter += 1;
+        // if(!this.counter && this.props.comments.length){
+        //     this.counter += 1
+        //     return;
+        // }
+        //TODO: Separate the add and remove logic into thiers own functions
+        //TODO: Pull the remove function out of the timeout function
+        if(this.state.rendition){
+            this.props.comments.map((comment,ind) => {
+                // console.log(comment.type, comment.range)
+                this.removeAnnotation(comment.range, comment.type || 'highlight')
+            })
+
+            this.props.comments.map((comment, ind) => {
+                this.AddAnnotation(comment.range, comment.type || 'highlight', {comment: comment.value}, comment.color);
+            })
+
+            this.prevComments = this.props.comments
+            // console.log(this.state.rendition.annotations)
+        }
+    }
+
+    AddAnnotations = () => {
+        if(this.state.rendition){
+            if(this.timer.timer) clearTimeout(this.timer.timer)
+            this.timer.timer = setTimeout(() => {
+                console.log('time out is loading')
+                    this.props.comments.map((comment, ind) => {
+                        this.AddAnnotation(comment.range, comment.type || 'highlight', {comment: comment.value}, comment.color)
+                    })
+            },1000)
+        }
+    }
+
+    removeAnnotations = () => {
+        if(this.state.rendition){
+            this.props.comments.map((comment,ind) => {
+                this.removeAnnotation(comment.range, comment.type || 'highlight')
+            })
+        }
+    }
+
+    AddAnnotation = (range, type, data, color) => {
+        const annType = {};
+        if(type === 'highlight') 
+            annType.fill = color;
+        else if(type === 'underline')
+            annType.stroke = color;
+
+        this.state.rendition.annotations.add(type, range, data, '', `epub-${type}`, annType)
+    }
+    
+    removeAnnotation = (range, type) => {
+        try {
+            // console.log(range, type)
+            this.state.rendition.annotations.remove(range, type);
+        } catch (error) {
+            // console.log(error)
+        }   
+    }
+
+    handleLocationChanged = (cfi) => {
+        this.props.handleLocationChanged(cfi)
+    }
+
+    goto = (url) => {
+        // console.log(url)
+        if(this.state.rendition)
+            this.state.rendition.display(url)
+    }
+
+    changeFontSize = (perc) => {
+        this.setState({fontSize: perc}, () => {
+            this.injectStyle()
+        })
+    }
+    injectStyle = () => {
+        if(this.state.rendition){
+            console.log('injecting font size an lineHeight')
+            // console.log(this.props.renderData.fontSize)
+            this.state.rendition.themes.fontSize(`${this.props.renderData.fontSize}%`)
+            this.state.rendition.themes.override('line-height', `${this.props.renderData.lineHeight}em`)
+            // this.state.rendition.getContents().forEach(content => {
+            //     const fontSizeElm = content.document.querySelector('#epub-font-size')
+            //     if(fontSizeElm)
+            //         fontSizeElm.remove()
+            //     // console.log(this.props.renderData.lineHeight)
+            //     const fontSizeText = `
+            //         body{
+            //             font-size: ${this.props.renderData.fontSize}% !important;
+            //         }
+            //         p{
+            //             line-height: ${this.props.renderData.lineHeight !== '0' ? this.props.renderData.lineHeight : 'w'}em !important;
+            //             margin-bottom: ${this.props.renderData.pMargin !== '0' ? this.props.renderData.pMargin : 'w'}em !important;
+            //         }`
+            //     const styleSize = content.document.createElement('style')
+            //     styleSize.id = 'epub-font-size'
+            //     styleSize.type = 'text/css';
+            //     styleSize.onload = e => {
+            //         // console.log(e)
+            //         // this.populateComments()
+            //     }
+            //     styleSize.appendChild(content.document.createTextNode(fontSizeText))
+            //     content.document.head.appendChild(styleSize)
+            // })
+        }
+    }
+
+    changeFont = () => {        
+        this.injectFontClass()
+    }
+
+    injectFontClass = () => {
+        if(this.state.rendition){
+            // this.state.rendition.themes.select(this.props.renderData.font)
+            console.log('injecting font class')
+            this.state.rendition.themes.font(`${this.props.renderData.font}`)
+            // this.state.rendition.getContents().forEach(content => {
+            //     content.document.body.classList.remove(...this.props.families)
+            //     content.document.body.classList.add(this.props.renderData.font)
+            // })
+        }
+    }
+
+    changeLineHeight = () => {
+        this.injectStyle()
+    }
+
+    changePMargin = () => {
+        this.injectStyle()
+    }
+
+    changePageFlow = () => {
+        if(this.state.rendition){
+            // console.log(this.props.pageFlow, pageFlow, this.state.pageFlow)
+            if(this.state.pageFlow !== this.props.pageFlow){
+                // this.setState({pageFlow: this.props.pagepageFlow})
+                // this.state.rendition.flow(pageFlow)
+                // this.populateComments()
+            }
+        }
+    }
+
+    renditionResize = () => {
+        if(this.state.rendition){
+            // this.state.rendition.resize()
+            console.log(this.state.rendition)
+            if(this.timer.resize) clearTimeout(this.timer.resize)
+            this.timer.resize = setTimeout(() => {
+                const {width, height } = this.readerRef.current.viewerRef.current.getBoundingClientRect()
+                console.log(width, height)
+                this.state.rendition.resize(width, height)
+            }, 800)
+            console.log(this.readerRef.current.viewerRef.current.getBoundingClientRect())
+            // this.state.rendition.resize()
+        }
+    }
+
+    componentDidMount(){
+        // this.populateComments()
+        // console.log(this.props.comments)
+        // this.populateComments()
+    }
+
+    componentDidUpdate(){
+        console.log(this.state.rendition)
+        if(this.state.rendition){
+            console.log(this.readerRef)
+            this.state.rendition.q.enqueue(this.addStyleSheets)
+            this.state.rendition.q.enqueue(this.injectStyle)
+            this.state.rendition.q.enqueue(this.injectFontClass)
+            this.state.rendition.q.enqueue(this.removeAnnotations)
+            this.AddAnnotations()
+            // if(/*!this.timer.timed && */ this.timer.timer){
+            //     clearTimeout(this.timer.timer)
+            // }
+            // if(!this.timer.timed && !this.timer.timer){
+                // this.state.rendition.q.enqueue(() => {
+                    
+                // })
+            // }
+            // else if(this.timer.timed){
+            //     console.log('timed')
+            //     this.state.rendition.q.enqueue(this.populateComments)
+            // }
+            
+        }
+    }
+
+    render(){
+        return (
+            <ReaderContainer wide={this.props.width}>
+                <ChevronWrapper style={{ left: 0 }} onClick={this.handleClick('left')}>
+                    <Button className="epub-chevron" index={'left'}>
+                        <ChevronLeftIcon/>
+                    </Button>
+                </ChevronWrapper>
+                <BookReaderWrapper>
+                    {<EpubView
+                        ref={this.readerRef}
+                        url={`http://localhost:${window.serverPort}/book/${getBasename(this.props.path)}`}
+                        locationChanged={this.handleLocationChanged} 
+                        getRendition={this.getRendition}
+                        epubOptions={{
+                            manager: "default",
+                            // flow: this.props.pageFlow
+                          }}
+                        tocChanged={this.props.loadToc}
+                        location={this.props.location}
+                        loadingView={
+                        <LoaderWrapper>
+                        <Loader
+                            type={this.spinner}
+                            color="#1100FC"
+                            height={100}
+                            width={100}
+                        />
+                        </LoaderWrapper>}
+                    />}
+                </BookReaderWrapper>
+                <ChevronWrapper onClick={this.handleClick('right')} style={{ right: 0 }}>
+                    <Button >
+                        <ChevronRightIcon/>
+                    </Button>
+                </ChevronWrapper>
+            </ReaderContainer>
+        );
+    }
+}
