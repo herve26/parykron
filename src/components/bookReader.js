@@ -198,32 +198,9 @@ export default class BookReader extends Component {
     injectStyle = () => {
         if(this.state.rendition){
             console.log('injecting font size an lineHeight')
-            // console.log(this.props.renderData.fontSize)
             this.state.rendition.themes.fontSize(`${this.props.renderData.fontSize}%`)
-            this.state.rendition.themes.override('line-height', `${this.props.renderData.lineHeight}em`)
-            // this.state.rendition.getContents().forEach(content => {
-            //     const fontSizeElm = content.document.querySelector('#epub-font-size')
-            //     if(fontSizeElm)
-            //         fontSizeElm.remove()
-            //     // console.log(this.props.renderData.lineHeight)
-            //     const fontSizeText = `
-            //         body{
-            //             font-size: ${this.props.renderData.fontSize}% !important;
-            //         }
-            //         p{
-            //             line-height: ${this.props.renderData.lineHeight !== '0' ? this.props.renderData.lineHeight : 'w'}em !important;
-            //             margin-bottom: ${this.props.renderData.pMargin !== '0' ? this.props.renderData.pMargin : 'w'}em !important;
-            //         }`
-            //     const styleSize = content.document.createElement('style')
-            //     styleSize.id = 'epub-font-size'
-            //     styleSize.type = 'text/css';
-            //     styleSize.onload = e => {
-            //         // console.log(e)
-            //         // this.populateComments()
-            //     }
-            //     styleSize.appendChild(content.document.createTextNode(fontSizeText))
-            //     content.document.head.appendChild(styleSize)
-            // })
+            if(this.props.renderData.lineHeight !== '0')
+                this.state.rendition.themes.override('line-height', `${this.props.renderData.lineHeight}em`)
         }
     }
 
@@ -233,13 +210,7 @@ export default class BookReader extends Component {
 
     injectFontClass = () => {
         if(this.state.rendition){
-            // this.state.rendition.themes.select(this.props.renderData.font)
-            console.log('injecting font class')
             this.state.rendition.themes.font(`${this.props.renderData.font}`)
-            // this.state.rendition.getContents().forEach(content => {
-            //     content.document.body.classList.remove(...this.props.families)
-            //     content.document.body.classList.add(this.props.renderData.font)
-            // })
         }
     }
 
@@ -264,7 +235,6 @@ export default class BookReader extends Component {
 
     renditionResize = () => {
         if(this.state.rendition){
-            // this.state.rendition.resize()
             console.log(this.state.rendition)
             if(this.timer.resize) clearTimeout(this.timer.resize)
             this.timer.resize = setTimeout(() => {
@@ -273,7 +243,6 @@ export default class BookReader extends Component {
                 this.state.rendition.resize(width, height)
             }, 800)
             console.log(this.readerRef.current.viewerRef.current.getBoundingClientRect())
-            // this.state.rendition.resize()
         }
     }
 
@@ -287,10 +256,14 @@ export default class BookReader extends Component {
         console.log(this.state.rendition)
         if(this.state.rendition){
             console.log(this.readerRef)
-            this.state.rendition.q.enqueue(this.addStyleSheets)
-            this.state.rendition.q.enqueue(this.injectStyle)
-            this.state.rendition.q.enqueue(this.injectFontClass)
-            this.state.rendition.q.enqueue(this.removeAnnotations)
+            // this.state.rendition.q.enqueue()
+            this.addStyleSheets()
+            // this.state.rendition.q.enqueue()
+            this.injectStyle()
+            // this.state.rendition.q.enqueue()
+            this.injectFontClass()
+            // this.state.rendition.q.enqueue()
+            this.removeAnnotations()
             this.AddAnnotations()
             // if(/*!this.timer.timed && */ this.timer.timer){
             //     clearTimeout(this.timer.timer)
