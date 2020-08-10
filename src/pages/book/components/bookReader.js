@@ -7,9 +7,9 @@ import _ from 'lodash';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import Button from './button';
-import { getBasename } from '../utils/book';
-import Range from '../utils/range';
+import Button from '../../../components/button';
+import { getBasename } from '../../../utils/book';
+import Range from '../../../utils/range';
 
 
 

@@ -8,15 +8,14 @@ import TocIcon from '@material-ui/icons/Toc';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import HighlightIcon from '@material-ui/icons/Highlight';
 
-import SideBarNav from '../../components/sidebarnav'
+import SideBarNav from './components/sidebarnav'
 import SideBar from './components/sidebar';
 
-import Collections from '../../components/sections/collections';
-import Comments from '../../components/sections/comments';
-import Settings from '../../components/sections/settings';
-import Toc from '../../components/sections/toc';
+import Comments from './sections/comments';
+import Settings from './sections/settings';
+import Toc from './sections/toc';
 
-import BookReader from '../../components/bookReader';
+import BookReader from './components/bookReader';
 import Modal from './components/modal';
 
 import { useWindowSize } from '../../utils/hooks';

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
-import Button from './button';
+import Button from '../../../components/button';
 
 const SidebarWrapper = styled.aside`
     min-width: 48px;
