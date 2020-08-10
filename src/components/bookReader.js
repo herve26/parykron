@@ -1,12 +1,16 @@
-import React, { Component, forwardRef } from 'react';
+import React, { Component, forwardRef, PureComponent } from 'react';
 import { EpubView } from 'react-reader';
 import styled from 'styled-components';
-import Button from './button';
+import Loader from 'react-loader-spinner'
+import _ from 'lodash';
+
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+
+import Button from './button';
 import { getBasename } from '../utils/book';
 import Range from '../utils/range';
-import Loader from 'react-loader-spinner'
+
 
 
 const ReaderContainer = styled.div`
@@ -44,11 +48,12 @@ export default class BookReader extends Component {
 
         this.readerRef = React.createRef();
         this.rendition = ''
-        this.state = {cfi: '', rendition: '', first_load: false }
+        this.state = {cfi: '', rendition: '', first_load: false, }
         this.prevComments = []
         this.spinner = "TailSpin"
         this.counter = 0
         this.timer = {timer: null, timed: false}
+        this.pageFlow = this.props.pageFlow
         // console.log(this.props.location)
         // console.log(this.props.renderData)
     }
@@ -86,6 +91,7 @@ export default class BookReader extends Component {
             // this.injectFontClass()
             // this.populateComments()
             // GODLDIE MAGAZINE
+            this.addStyleSheets()
         })
 
         rendition.on('displayed', (section) => {
@@ -94,7 +100,7 @@ export default class BookReader extends Component {
         })
 
         rendition.on('resized', ()=> {
-            console.log('resized')
+            // console.log('resized')
             
             // this.populateComments();
         })
@@ -102,7 +108,7 @@ export default class BookReader extends Component {
 
     addStyleSheets = () => {
         // if(this.state.rendition){
-            console.log('adding font stylesheet')
+            // console.log('adding font stylesheet')
             this.state.rendition.themes.register('/style/font-style.css')
             // rendition.themes.font(`${this.props.renderData.font}`)
             // this.state.rendition.themes.register('Open Sans', '/style/font-style.css')
@@ -145,7 +151,7 @@ export default class BookReader extends Component {
         if(this.state.rendition){
             if(this.timer.timer) clearTimeout(this.timer.timer)
             this.timer.timer = setTimeout(() => {
-                console.log('time out is loading')
+                // console.log('time out is loading')
                     this.props.comments.map((comment, ind) => {
                         this.AddAnnotation(comment.range, comment.type || 'highlight', {comment: comment.value}, comment.color)
                     })
@@ -197,7 +203,7 @@ export default class BookReader extends Component {
     }
     injectStyle = () => {
         if(this.state.rendition){
-            console.log('injecting font size an lineHeight')
+            // console.log('injecting font size an lineHeight')
             this.state.rendition.themes.fontSize(`${this.props.renderData.fontSize}%`)
             if(this.props.renderData.lineHeight !== '0')
                 this.state.rendition.themes.override('line-height', `${this.props.renderData.lineHeight}em`)
@@ -224,25 +230,25 @@ export default class BookReader extends Component {
 
     changePageFlow = () => {
         if(this.state.rendition){
-            // console.log(this.props.pageFlow, pageFlow, this.state.pageFlow)
+            console.log(this.props.pageFlow, this.pageFlow)
             if(this.state.pageFlow !== this.props.pageFlow){
                 // this.setState({pageFlow: this.props.pagepageFlow})
-                // this.state.rendition.flow(pageFlow)
-                // this.populateComments()
+                this.state.rendition.flow(this.props.pageFlow)
+                this.pageFlow = this.props.pageFlow
             }
         }
     }
 
     renditionResize = () => {
         if(this.state.rendition){
-            console.log(this.state.rendition)
+            // console.log(this.state.rendition)
             if(this.timer.resize) clearTimeout(this.timer.resize)
             this.timer.resize = setTimeout(() => {
                 const {width, height } = this.readerRef.current.viewerRef.current.getBoundingClientRect()
-                console.log(width, height)
+                // console.log(width, height)
                 this.state.rendition.resize(width, height)
             }, 800)
-            console.log(this.readerRef.current.viewerRef.current.getBoundingClientRect())
+            // console.log(this.readerRef.current.viewerRef.current.getBoundingClientRect())
         }
     }
 
@@ -252,31 +258,32 @@ export default class BookReader extends Component {
         // this.populateComments()
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        console.log(nextProps)
+        const { comments, pageFlow, renderData } = this.props
+        const { font, lineHeight, fontSize } = renderData
+        const { comments: nextComments, pageFlow: nextPageFlow, renderData: nextRenderData } = nextProps
+        const { font: nextFont, lineHeight: nextLineH, fontSize: nextFontSize } = nextRenderData
+        let shouldUpdate = false
+
+        if(!_.isEqual(comments, nextComments)) shouldUpdate = true
+        if(!_.isEqual(pageFlow, nextPageFlow)) shouldUpdate = true
+        if(!_.isEqual(font, nextFont)) shouldUpdate = true
+        if(!_.isEqual(lineHeight, nextLineH)) shouldUpdate = true
+        if(!_.isEqual(fontSize, nextFontSize)) shouldUpdate = true
+        
+        return shouldUpdate;
+    }
+
     componentDidUpdate(){
-        console.log(this.state.rendition)
+        // console.log(this.state.rendition)
         if(this.state.rendition){
-            console.log(this.readerRef)
-            // this.state.rendition.q.enqueue()
-            this.addStyleSheets()
-            // this.state.rendition.q.enqueue()
+            // console.log(this.readerRef)
             this.injectStyle()
-            // this.state.rendition.q.enqueue()
             this.injectFontClass()
-            // this.state.rendition.q.enqueue()
             this.removeAnnotations()
             this.AddAnnotations()
-            // if(/*!this.timer.timed && */ this.timer.timer){
-            //     clearTimeout(this.timer.timer)
-            // }
-            // if(!this.timer.timed && !this.timer.timer){
-                // this.state.rendition.q.enqueue(() => {
-                    
-                // })
-            // }
-            // else if(this.timer.timed){
-            //     console.log('timed')
-            //     this.state.rendition.q.enqueue(this.populateComments)
-            // }
+            this.changePageFlow()
             
         }
     }

@@ -13,6 +13,7 @@
     "epub-parser": "^0.2.5",
     "express": "^4.17.1",
     "hasha": "^5.2.0",
+    "lodash": "^4.17.19",
     "nedb": "^1.8.0",
     "pouchdb": "^7.2.2",
     "pouchdb-find": "^7.2.2",
