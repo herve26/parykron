@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components';
-import Comment from '../comment';
+import Comment from '../../pages/book/components/comment';
 
 
 const H3 = styled.h3`

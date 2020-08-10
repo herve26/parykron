@@ -8,21 +8,21 @@ import TocIcon from '@material-ui/icons/Toc';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import HighlightIcon from '@material-ui/icons/Highlight';
 
-import SideBarNav from '../components/sidebarnav'
-import SideBar from '../components/sidebar';
+import SideBarNav from '../../components/sidebarnav'
+import SideBar from './components/sidebar';
 
-import Collections from '../components/sections/collections';
-import Comments from '../components/sections/comments';
-import Settings from '../components/sections/settings';
-import Toc from '../components/sections/toc';
+import Collections from '../../components/sections/collections';
+import Comments from '../../components/sections/comments';
+import Settings from '../../components/sections/settings';
+import Toc from '../../components/sections/toc';
 
-import BookReader from '../components/bookReader';
-import Modal from '../components/modal';
+import BookReader from '../../components/bookReader';
+import Modal from './components/modal';
 
-import { useWindowSize } from '../utils/hooks';
-import Range, {isOverlapping} from '../utils/range';
-import { useCommentStore, bookUpdate } from '../utils/store';
-import { useBuildFonts } from '../utils/font';
+import { useWindowSize } from '../../utils/hooks';
+import Range, {isOverlapping} from '../../utils/range';
+import { useCommentStore, bookUpdate } from '../../utils/store';
+import { useBuildFonts } from '../../utils/font';
 
 
 // TODO: There is too much going on in this component it needs to be split

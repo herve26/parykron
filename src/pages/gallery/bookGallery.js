@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import styled from 'styled-components';
 
-import Book from './book';
-import { addBook, getBasename } from '../utils/book';
+import Book from './components/book';
+import { addBook, getBasename } from '../../utils/book';
 
 const MainWrapper = styled.main`
     margin: 0 48px;

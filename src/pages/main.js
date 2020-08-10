@@ -2,9 +2,9 @@ import React, { useState, Fragment } from 'react';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import Header from "./header";
-import BookPage from '../pages/book';
-import Button from "./button";
-import BookGallery from './bookGallery';
+import BookPage from './book/book';
+import Button from "../components/button";
+import BookGallery from './gallery/bookGallery';
 import { useGetAllBooks, updateBookMeta, bookUpdate } from '../utils/store'
 
 
