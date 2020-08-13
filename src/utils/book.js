@@ -7,10 +7,28 @@ const path = remote.require('path')
 const fs = remote.require('fs')
 const hasha = remote.require('hasha')
 
+const ipc = window.electron.ipcRenderer
+
 const userData = app.getPath('userData')
 const ebookPathName = 'book'
 
+function addBook(){
+    return new Promise((resolve, reject) => {
+        ipc.send('add-book', 'what a book')
+        ipc.on('add-book-reply', (event, arg) => {
+            if(arg.ok){
+                resolve(arg)
+                return
+            }
+            else{
+                reject(false)
+            }
+        })
+    })
+    
+}
 
+/*
 function addBook(){
     
     return new Promise(async (resolve, reject) => {
@@ -52,6 +70,7 @@ function addBook(){
 
     })
 }
+*/
 
 function loadBooks(){
 

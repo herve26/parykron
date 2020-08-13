@@ -22,7 +22,8 @@ export default function Main(){
         
         newBook().then(result => {
             if(result && result.ok){
-                setAddedNewBook(result)
+                // setAddedNewBook(result)
+                console.log(result)
             }
         }).catch(err => {console.log(err)})
     }

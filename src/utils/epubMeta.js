@@ -5,6 +5,7 @@ const app = remote.app
 const path = remote.require('path')
 const fs = remote.require('fs')
 const { storeMeta } = require('./store')
+const { getBasename } = require('./book')
 // const app = electron.app
 
 
@@ -21,7 +22,7 @@ function saveMeta(arg, cb){
     }
 
     return new Promise((resolve, reject) => {
-
+        console.log(`http://localhost:${window.serverPort}/book/${getBasename(metadata.bookPath)}`)
         epub.open(metadata.bookPath, (err, data) => {
 
             if(err) { reject(err); return }
