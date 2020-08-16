@@ -79,6 +79,11 @@ app.on('activate', function () {
 // code. You can also put them in separate files and require them here.
 const ADD_BOOK = 'ADD_BOOK'
 ipcMain.on(ADD_BOOK, async (event, arg) => {
-    const resp = await addBook(event, arg);
-    event.sender.send(ADD_BOOK, {meta: resp, uuid: arg})
+    try{
+        const resp = await addBook();
+        event.sender.send(ADD_BOOK, {added: true, meta: resp})
+    }
+    catch(err){
+        event.sender.send(ADD_BOOK, {added: false})
+    }
 })

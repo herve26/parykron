@@ -11,6 +11,7 @@ import { useGetAllBooks, updateBookMeta, bookUpdate } from '../utils/store'
 
 export default function Main(){
 
+    const addingBookUuid = []
     const pages = ["gallery", "book"]
 
     const [ page, setPage ] = useState(pages[0])
@@ -18,14 +19,7 @@ export default function Main(){
     const [ currentBook, setCurrentBook ] = useState(books[0] || {})
 
     const handleAddBook = newBook => async (e) => { 
-
-        
-        newBook().then(result => {
-            if(result && result.ok){
-                // setAddedNewBook(result)
-                console.log(result)
-            }
-        }).catch(err => {console.log(err)})
+        newBook(reloadBooks)
     }
 
     const handleBookClicked = b => e => {

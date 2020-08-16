@@ -8,11 +8,11 @@ const expApp = express()
 
 
 const startServer = (app) => {
-    const publicFolder = app.getPath('userData')
+    const publicFolder = app.getPath('documents')
     return new Promise((resolve, reject) => {
         expApp.use(cors())
-        expApp.use('/book', express.static(path.join(publicFolder, 'book')))
-        expApp.use('/cover', express.static(path.join(publicFolder, 'Cover')))
+        expApp.use('/book', express.static(path.join(app.getPath('documents'), app.getName(),'Books')))
+        expApp.use('/cover', express.static(path.join(app.getPath('userData'), 'Cover')))
         const server = expApp.listen(0, err => {
             if(err)
                 reject('Error initializing the server')
