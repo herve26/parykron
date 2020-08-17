@@ -24,7 +24,7 @@ export default function BookGallery(props){
 
     return(
         <Fragment>
-            <MainWrapper>
+            <MainWrapper className="scrollbar">
                 {bookComponents}
             </MainWrapper>
         </Fragment>

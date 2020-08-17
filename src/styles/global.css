@@ -341,14 +341,14 @@ template {
   display: none;
 }
 
-html {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
 *, *:before, *:after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
@@ -358,5 +358,17 @@ body {
 a {
   color: #707070;
   text-decoration: none;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #FFF;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #707070;
 }
 /*# sourceMappingURL=global.css.map */
