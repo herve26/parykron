@@ -8,6 +8,7 @@ const ButtonWrapper = styled.button`
     border: none;
     color: ${props => props.active ? '#1100FC' : '#707070'};
     cursor: pointer;
+    -webkit-app-region: no-drag;
 `
 export default function Button(props){
     return (

@@ -7,7 +7,7 @@ import BookPage from './book/book';
 import Button from "../components/button";
 import BookGallery from './gallery/bookGallery';
 import { useGetAllBooks, updateBookMeta, bookUpdate } from '../utils/store'
-import { addBook, addBookListener } from '../utils/book';
+import { addBook, addListeners } from '../utils/book';
 
 const PageWrapper = styled.div`
     /* border: 1px solid blue; */
@@ -23,8 +23,6 @@ export default function Main(){
     const [ page, setPage ] = useState(pages[0])
     const [ books, reloadBooks, setAddedNewBook] = useGetAllBooks()
     const [ currentBook, setCurrentBook ] = useState(books[0] || {})
-
-    addBookListener(reloadBooks)
 
     const handleAddBook = () => { 
         addBook()
@@ -42,6 +40,9 @@ export default function Main(){
         setPage(pages[0])
         reloadBooks()
     }
+
+    // Adding listener for the main process
+    addListeners({loadBooks: reloadBooks})
 
     return (
         <PageWrapper>

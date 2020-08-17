@@ -20,9 +20,14 @@ function createWindow(arg) {
     // Create the browser window.
     console.log(__dirname + '/preload.js')
     global.serverPort = arg
-    mainWindow = new BrowserWindow({width: 800, height: 600, frame: true,webPreferences:{
-        preload: path.join(__dirname + '/preload.js'),
-        webSecurity: false}
+    mainWindow = new BrowserWindow({
+        width: 800, height: 600, 
+        frame: false,
+        backgroundColor: '#FFF',
+        webPreferences:{
+            preload: path.join(__dirname + '/preload.js'),
+            webSecurity: false
+        }
     });
 
     // and load the index.html of the app.
@@ -78,14 +83,20 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 const ADD_BOOK = 'ADD_BOOK'
-let count = 0
+const MINIMIZE = 'MINIMIZE'
+
 ipcMain.on(ADD_BOOK, async (event, arg) => {
-    const message = {added: false, c: count++}
+    const message = {added: false}
     try{
         message.meta = await addBook();
+        message.added = true;
     }
     catch(err){
         console.log(err)
     }
     event.sender.send(ADD_BOOK, message)
+})
+
+ipcMain.on(MINIMIZE, (event, arg) => {
+    console.log('minimize')
 })

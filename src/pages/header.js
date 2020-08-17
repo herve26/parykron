@@ -12,11 +12,14 @@ const HeaderWrapper = styled.header`
     box-shadow: 0px 2px 4px #00000029;
     /* border: 1px solid red; */
     height: 32px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
 `
 const H1 = styled.h1`
     margin: 0;
     margin-left: 48px;
     padding: 6px 0;
+    -webkit-app-region: no-drag;
 `
 const AddButton = styled.button`
     border: 1px solid red;
@@ -33,6 +36,7 @@ const AddButton = styled.button`
     height: 24px;
     /* border-radius: 50%; */
     cursor: pointer;
+    -webkit-app-region: no-drag;
 `
 
 export default function Header(props){
