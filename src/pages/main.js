@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react';
+import styled from 'styled-components';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import Header from "./header";
@@ -7,7 +8,11 @@ import Button from "../components/button";
 import BookGallery from './gallery/bookGallery';
 import { useGetAllBooks, updateBookMeta, bookUpdate } from '../utils/store'
 
-
+const PageWrapper = styled.div`
+    /* border: 1px solid blue; */
+    overflow: hidden;
+    max-height: 100vh;
+`
 
 export default function Main(){
 
@@ -36,7 +41,7 @@ export default function Main(){
     }
 
     return (
-        <Fragment>
+        <PageWrapper>
             <Header>
                 {page === pages[1] && <Button index={0} handleClick={handleBackClicked}>
                     <ChevronLeftIcon/>
@@ -45,6 +50,6 @@ export default function Main(){
             { page === pages[0] ? 
                 <BookGallery books={books} handleAddBook={handleAddBook} handleBookClicked={handleBookClicked} /> : 
                 <BookPage book={currentBook} /> }
-        </Fragment>
+        </PageWrapper>
     )
 }
