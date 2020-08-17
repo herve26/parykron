@@ -23,8 +23,9 @@ export default function Main(){
     const [ books, reloadBooks, setAddedNewBook] = useGetAllBooks()
     const [ currentBook, setCurrentBook ] = useState(books[0] || {})
 
-    const handleAddBook = newBook => async (e) => { 
-        newBook(reloadBooks)
+    const handleAddBook = () => { 
+        // newBook(reloadBooks)
+        console.log('adding new book')
     }
 
     const handleBookClicked = b => e => {
@@ -42,7 +43,7 @@ export default function Main(){
 
     return (
         <PageWrapper>
-            <Header>
+            <Header handleAddBook={handleAddBook}>
                 {page === pages[1] && <Button index={0} handleClick={handleBackClicked}>
                     <ChevronLeftIcon/>
                 </Button>}
