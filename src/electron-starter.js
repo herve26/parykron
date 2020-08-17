@@ -78,12 +78,14 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 const ADD_BOOK = 'ADD_BOOK'
+let count = 0
 ipcMain.on(ADD_BOOK, async (event, arg) => {
+    const message = {added: false, c: count++}
     try{
-        const resp = await addBook();
-        event.sender.send(ADD_BOOK, {added: true, meta: resp})
+        message.meta = await addBook();
     }
     catch(err){
-        event.sender.send(ADD_BOOK, {added: false})
+        console.log(err)
     }
+    event.sender.send(ADD_BOOK, message)
 })
