@@ -20,7 +20,7 @@ function createWindow(arg) {
     // Create the browser window.
     console.log(__dirname + '/preload.js')
     global.serverPort = arg
-    mainWindow = new BrowserWindow({width: 800, height: 600, webPreferences:{
+    mainWindow = new BrowserWindow({width: 800, height: 600, frame: true,webPreferences:{
         preload: path.join(__dirname + '/preload.js'),
         webSecurity: false}
     });
