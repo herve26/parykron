@@ -10,6 +10,8 @@ const HeaderWrapper = styled.header`
     justify-content: center;
     align-items: center;
     box-shadow: 0px 2px 4px #00000029;
+    /* border: 1px solid red; */
+    height: 32px;
 `
 const H1 = styled.h1`
     margin: 0;
