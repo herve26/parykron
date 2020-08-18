@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { startServer } = require('./server')
+const { startServer } = require('./electron/server')
 // const { saveMeta } = require('./main/epubMeta');
 // const { parseEpub } = require('@gxl/epub-parser')
 // Module to control application life.
@@ -18,14 +18,13 @@ let mainWindow;
 
 function createWindow(arg) {
     // Create the browser window.
-    console.log(__dirname + '/preload.js')
     global.serverPort = arg
     mainWindow = new BrowserWindow({
         width: 800, height: 600, 
         frame: false,
         backgroundColor: '#FFF',
         webPreferences:{
-            preload: path.join(__dirname + '/preload.js'),
+            preload: path.join(__dirname,'electron','preload.js'),
             webSecurity: false
         }
     });
@@ -40,7 +39,8 @@ function createWindow(arg) {
     mainWindow.loadURL(`${startUrl}`);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if(process.env.ELECTRON_START_URL)
+        mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-//TODO: make the button height even with inline block
+
 const BookImageWrapper = styled.div`
     width: 256px;
 `

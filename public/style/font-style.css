@@ -207,4 +207,5 @@ body.Open-Sans{
 
 p{
     /* text-justify: none !important; */
+    font-family: inherit !important;
 }

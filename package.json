@@ -28,7 +28,7 @@
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1"
   },
-  "main": "src/electron-starter.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "scripts": {
     "start": "react-app-rewired start",
@@ -36,8 +36,21 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
-    "dev": "nf start"
+    "electron-dev": "concurrently \"set BROWSER=none && npm start\" \"wait-on http://localhost:3000 && set ELECTRON_START_URL=http://localhost:3000 && electron .\"",
+    "dev": "nf start",
+    "preelectron-pack": "npm run build",
+    "preelectron-dist": "npm run build",
+    "electron-pack": "electron-builder --dir",
+    "electron-dist": "electron-builder"
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories":{
+      "buildResources": "assets"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -55,9 +68,12 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "craco": "0.0.3",
     "electron": "^9.1.0",
+    "electron-builder": "^22.8.0",
     "foreman": "^3.0.1",
-    "react-app-rewired": "^2.1.6"
+    "react-app-rewired": "^2.1.6",
+    "wait-on": "^5.2.0"
   }
 }

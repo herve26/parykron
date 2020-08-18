@@ -38,7 +38,6 @@ const ModalTitle = styled.h3`
 
 const ColorContainer = styled.div`
     display: flex;
-    /* justify-content: space-between; */
     margin: 12px 0;
     padding: 6px;
     border: 1px solid ${colors.secondary};
@@ -124,8 +123,6 @@ const SubmitButton = styled.button`
 const CommentType = (props) => <TypeButton activeType={props.activeType} onClick={() => props.clicked(props.index)}>{props.label}</TypeButton>
 
 export default function Modal(props){
-    const ty = 'highlight'
-    // const annotationType = [{name: 'highlight', label: <HighlightIcon/>}, {name: 'underline', label: <FormatUnderlinedIcon/>}]
     const [comment, setComment] = useState('')
     const [activeColor, setActiveColor] = useState(0)
 

@@ -2,17 +2,11 @@ import React, { Fragment, useState } from 'react'
 import styled from 'styled-components';
 
 const H3 = styled.h3`
-    /* border: 1px solid red; */
     margin: 0;
     padding: 0;
 `
 
-const SettingsWrapper = styled.div`
-    /* border: 1px solid blue; */
-`
-
 const Label = styled.label`
-    /* border: 1px solid yellow; */
     display: block;
     margin: 12px 0;
     padding: 6px 4px;
@@ -37,7 +31,7 @@ export default function Settings(props) {
     return (
         <Fragment>
             <H3>Settings</H3>
-            <SettingsWrapper>
+            <div>
                 <Label>Font
                     <Select 
                         value={props.fonts.indexOf(props.font)} 
@@ -78,7 +72,7 @@ export default function Settings(props) {
                         onChange={e => props.handlePageFlowChanged(e.target.value)}
                         >{pageFlowSelect}</Select>
                 </Label>
-            </SettingsWrapper>
+            </div>
         </Fragment>
     )
 }
