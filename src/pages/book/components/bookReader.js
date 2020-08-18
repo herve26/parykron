@@ -109,7 +109,7 @@ export default class BookReader extends Component {
     addStyleSheets = () => {
         // if(this.state.rendition){
             // console.log('adding font stylesheet')
-            this.state.rendition.themes.register('/style/font-style.css')
+            this.state.rendition.themes.register('./style/font-style.css')
             // rendition.themes.font(`${this.props.renderData.font}`)
             // this.state.rendition.themes.register('Open Sans', '/style/font-style.css')
             // this.state.rendition.getContents().forEach((content) => {
