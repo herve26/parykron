@@ -1,22 +1,17 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
-const text_level = ['bold', 'normal', 'italic']
-
 const H2 = styled.h2`
     margin: 0;
     padding: 0;
 `
 
 const Ul = styled.ul`
-    /* border: 1px solid red; */
     list-style: none;
     padding: 0;
-    /* overflow-y: scroll; */
 `
 
 const Li = styled.li`
-    /* border: 1px solid blue; */
     margin: 12px 0;
     border: 1px solid #e0e0e0;
     padding: 6px 4px;
@@ -27,10 +22,6 @@ const Li = styled.li`
         background-color: #e0e0e054;
     }
 `
-
-// export default function TocLi(props){
-    
-// }
 
 export default function Toc(props){
 
@@ -49,7 +40,6 @@ export default function Toc(props){
         tocArrToElm(props.value, toc, 0)
     }
 
-    // const toc = props.value.map((value, index) => <Li key={index}>{value.label.trim()}</Li>)
     return(
         <Fragment>
             <H2>Table of Content</H2>

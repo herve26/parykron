@@ -37,9 +37,6 @@ const MaximazeButton = styled.button`
 `
 
 export default function WindowsNav(props){
-    const handleClick = (action) => {
-        console.log(action)
-    }
     return(
         <div>
             <MinimizeButton onClick={()=> minimizeWindow()}>-</MinimizeButton>

@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components'; 
-import Epubcfi from 'epubjs/lib/epubcfi'
 
 import CommentIcon from '@material-ui/icons/Comment';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -19,30 +18,23 @@ import BookReader from './components/bookReader';
 import Modal from './components/modal';
 
 import { useWindowSize } from '../../utils/hooks';
-import Range, {isOverlapping} from '../../utils/range';
+import Range from '../../utils/range';
 import { useCommentStore, bookUpdate } from '../../utils/store';
-import { useBuildFonts } from '../../utils/font';
 
-
-// TODO: There is too much going on in this component it needs to be split
-// TODO: Change it into a class component
 
 
 const Container = styled.div`
-    /* border: 1px solid red; */
     display: flex;
     height: 90vh;
 `
 const AsideContainer = styled.div`
-    /* width: 25%; */
     display: flex;
     height: 100%;
-    /* border: 2px solid yellow; */
 `
 
 
 export default function Book(props){
-    // console.log(props)
+
     const highlightColors = ['#F4A93A', '#F64BAB', '#1CA7E0', '#E1EA4E', '#F8D336']
     const fontFamilies = ['Default', 'Roboto', 'Open Sans']
     const annotationTypes = [{name: 'highlight', label: <HighlightIcon/>}, {name: 'underline', label: <FormatUnderlinedIcon/>}]
@@ -52,6 +44,7 @@ export default function Book(props){
         {name:'comments', image:<CommentIcon/>}, 
         {name:'Settings', image:<SettingsIcon/>}
     ]
+
     const isEmpty = (obj) => {
         const em = Object.keys(obj).length;
         if(em > 0)
@@ -72,6 +65,7 @@ export default function Book(props){
     const [modalOpen, setModalOpen] = useState(false)
     const [cfiRange, setCfiRange] = useState('')
     const [ isSectionClose, setSectionClose ] = useState(false)
+
     const handleSectionChange = v => e => {
         if(v === activeSection && !isSectionClose){
             console.log(sections[v].name)
@@ -89,9 +83,6 @@ export default function Book(props){
         }
         
     }
-
-    // console.log(props.book, pageFlow)
-    // console.log(annotationTypes.indexOf(props.book.doc.page_flow), props.book.doc.page_flow)
 
     const handleModalOpen = v => e => {
 
@@ -115,12 +106,10 @@ export default function Book(props){
     }
     
     const handleCommentClick = range => {
-        console.log(range)
         readerRef.current.goto(range)
     }
 
     const handleAnnotationTypeChange = t => {
-        console.log(t)
         setcurrentAnnotationType(annotationTypes[t])
     }
 
@@ -159,8 +148,9 @@ export default function Book(props){
     const handlePageFlowChanged = f => {
         bookUpdate.pageFlow(props.book, pageFlowTypes[f])
         setPageFlow(f)
-        // readerRef.current.changePageFlow(pageFlowTypes[f])
     }
+
+    //TODO: made the width and light dynamic with css
     const sidebarWidth = 289;
     const sidebarNavWidth = 48;
 

@@ -10,7 +10,6 @@ import { useGetAllBooks, updateBookMeta, bookUpdate } from '../utils/store'
 import { addBook, addListeners } from '../utils/book';
 
 const PageWrapper = styled.div`
-    /* border: 1px solid blue; */
     overflow: hidden;
     max-height: 100vh;
 `
@@ -32,7 +31,6 @@ export default function Main(){
 
         setCurrentBook(books[b])
         setPage(pages[1])
-        // updateBookMeta(books[b])
         bookUpdate.lastVisite(books[b])
     }
 
